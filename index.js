@@ -43,10 +43,6 @@ class Factory extends AbstractFactory {
     this.definition = definition;
   }
 
-  array(number) {
-    return new ArrayFactory(this, number);
-  }
-
   produce(seed, overrides = {}) {
     const result = {};
 
@@ -97,6 +93,13 @@ class ArrayFactory extends AbstractFactory {
  */
 exports.factory = (definition) => {
   return new Factory(definition);
+};
+
+/**
+ * Create an array factory
+ */
+exports.arrayOf = (factory, n) => {
+  return new ArrayFactory(factory, n);
 };
 
 /**
