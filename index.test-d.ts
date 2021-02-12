@@ -5,14 +5,17 @@ import { expectError, expectType } from "tsd";
 expectError(factory({ id: {} }));
 
 expectType<Generator<number>>(sequence((id) => id));
-expectType<Generator<number>>(random.age());
+expectType<Generator<number>>(random((chance) => chance.age()));
+expectType<Generator<number>>(random((chance) => chance.pickone([1, 2, 3])));
 
 expectType<Factory<{ id: 1 }>>(factory({ id: 1 }));
 expectType<{ id: 1 }>(factory({ id: 1 }).build());
 expectType<{ id: 1 }>(factory({ id: 1 }).fixture());
 
 expectType<Factory<{ id: number }>>(factory({ id: sequence((id) => id) }));
-expectType<Factory<{ id: number }>>(factory({ id: random.age() }));
+expectType<Factory<{ id: number }>>(
+  factory({ id: random((chance) => chance.age()) })
+);
 expectType<Factory<{ user: { id: number } }>>(
   factory({ user: factory({ id: sequence((id) => id) }) })
 );

@@ -58,16 +58,14 @@ class Sequence extends BaseGenerator {
  * This generates random data using Chance.js
  */
 class Random extends BaseGenerator {
-  constructor(name, args) {
+  constructor(fn) {
     super();
-    this.name = name;
-    this.args = args;
+    this.fn = fn;
   }
 
   produce(seed) {
     const chance = new Chance(seed);
-    const fn = chance[this.name];
-    const result = fn.apply(chance, ...this.args);
+    const result = this.fn(chance);
     return [result, advance(seed)];
   }
 }
@@ -172,9 +170,6 @@ exports.sequence = (fn) => {
 /**
  * Create a random value
  */
-exports.random = new Proxy(
-  {},
-  {
-    get: (_target, name) => (...args) => new Random(name, args),
-  }
-);
+exports.random = (fn) => {
+  return new Random(fn);
+};
