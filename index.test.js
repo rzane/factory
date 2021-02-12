@@ -67,6 +67,14 @@ describe("Factory", () => {
       name: "Roy",
     });
   });
+
+  test("throws for non-object", () => {
+    expect(() => user.build(9)).toThrow(TypeError);
+  });
+
+  test("throws for invalid property", () => {
+    expect(() => user.build({ foo: "bar" })).toThrow(TypeError);
+  });
 });
 
 describe("ArrayFactory", () => {
@@ -94,5 +102,9 @@ describe("ArrayFactory", () => {
     const comments = comment.array().fixture([{ user: { id: 42 } }]);
 
     expect(comments).toHaveProperty("0.user.id", 42);
+  });
+
+  test("throws for non-array", () => {
+    expect(() => user.array().build(9)).toThrow(TypeError);
   });
 });

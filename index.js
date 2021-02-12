@@ -8,6 +8,10 @@ function advance(n) {
   return n >= Number.MAX_SAFE_INTEGER ? 0 : n + 1;
 }
 
+function isPlainObject(value) {
+  return Object.prototype.toString.call(value) === "[object Object]";
+}
+
 function isFactory(value) {
   return value instanceof BaseFactory;
 }
@@ -91,6 +95,18 @@ class Factory extends BaseFactory {
   produce(seed, overrides = {}) {
     const result = {};
 
+    if (!isPlainObject(overrides)) {
+      throw new TypeError("Factory overrides must be an object");
+    }
+
+    for (const key of Object.keys(overrides)) {
+      if (!(key in this.definition)) {
+        throw new TypeError(
+          `Factory received key '${key}', but no such property is defined`
+        );
+      }
+    }
+
     for (let [key, definition] of Object.entries(this.definition)) {
       let value;
 
@@ -122,6 +138,10 @@ class ArrayFactory extends BaseFactory {
   }
 
   produce(seed, overrides = []) {
+    if (!Array.isArray(overrides)) {
+      throw new TypeError("Factory overrides must be an array");
+    }
+
     const result = [];
     const count = overrides.length || this.count;
 
