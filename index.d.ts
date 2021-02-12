@@ -10,8 +10,8 @@ export interface Generator<T> {
  * Represents an array
  */
 export interface ArrayFactory<T> {
-  build(overrides?: Overrides<T>[]): T[];
-  fixture(overrides?: Overrides<T>[]): T[];
+  build(overrides?: Overrides<T>): T;
+  fixture(overrides?: Overrides<T>): T;
 }
 
 /**
@@ -20,7 +20,7 @@ export interface ArrayFactory<T> {
 export interface Factory<T> {
   build(overrides?: Overrides<T>): T;
   fixture(overrides?: Overrides<T>): T;
-  array(n?: number): ArrayFactory<T>;
+  array(n?: number): ArrayFactory<T[]>;
   extend<R>(definition: Definition<R>): Factory<Extend<T, R>>;
 }
 
