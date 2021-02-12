@@ -1,0 +1,7 @@
+{
+  "name": "@stackup/factory",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "rzane",
+  "license": "MIT"
+}
