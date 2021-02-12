@@ -1,7 +1,30 @@
 {
   "name": "@stackup/factory",
-  "version": "1.0.0",
-  "main": "index.js",
-  "author": "rzane",
-  "license": "MIT"
+  "license": "MIT",
+  "version": "0.1.0",
+  "description": "Format URL strings with template parameters",
+  "repository": "rzane/url-fmt",
+  "scripts": {
+    "test": "jest",
+    "test:types": "tsd"
+  },
+  "files": [
+    "index.js",
+    "index.d.ts"
+  ],
+  "keywords": [
+    "factory",
+    "test",
+    "typescript",
+    "random",
+    "data"
+  ],
+  "dependencies": {
+    "@types/chance": "^1.1.1",
+    "chance": "^1.1.7"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3",
+    "tsd": "^0.14.0"
+  }
 }

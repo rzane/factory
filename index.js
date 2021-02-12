@@ -1,5 +1,7 @@
+const { Chance } = require("chance");
+
 function random() {
-  return Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+  return Math.floor(Math.random() * 1000);
 }
 
 function advance(n) {
@@ -7,10 +9,14 @@ function advance(n) {
 }
 
 function isFactory(value) {
-  return value instanceof AbstractFactory;
+  return value instanceof BaseFactory;
 }
 
-class AbstractFactory {
+function isGenerator(value) {
+  return value instanceof BaseGenerator;
+}
+
+class BaseFactory {
   fixture(...args) {
     return this.produce(42, ...args)[0];
   }
@@ -20,10 +26,20 @@ class AbstractFactory {
   }
 }
 
+class BaseGenerator {
+  fixture() {
+    return this.produce(42)[0];
+  }
+
+  build() {
+    return this.produce(random())[0];
+  }
+}
+
 /**
- * This factory generates things that need to be unique.
+ * This generates things that need to be unique.
  */
-class Sequence extends AbstractFactory {
+class Sequence extends BaseGenerator {
   constructor(fn) {
     super();
     this.fn = fn;
@@ -35,12 +51,41 @@ class Sequence extends AbstractFactory {
 }
 
 /**
+ * This generates random data using Chance.js
+ */
+class Random extends BaseGenerator {
+  constructor(name, args) {
+    super();
+    this.name = name;
+    this.args = args;
+  }
+
+  produce(seed) {
+    const chance = new Chance(seed);
+    const fn = chance[this.name];
+    const result = fn.apply(chance, ...this.args);
+    return [result, advance(seed)];
+  }
+}
+
+/**
  * This factory generates objects.
  */
-class Factory extends AbstractFactory {
+class Factory extends BaseFactory {
   constructor(definition) {
     super();
     this.definition = definition;
+  }
+
+  array(n) {
+    return new ArrayFactory(this, n);
+  }
+
+  extend(definition) {
+    return new Factory({
+      ...this.definition,
+      ...definition,
+    });
   }
 
   produce(seed, overrides = {}) {
@@ -53,6 +98,8 @@ class Factory extends AbstractFactory {
         [value, seed] = definition.produce(seed, overrides[key]);
       } else if (key in overrides) {
         value = overrides[key];
+      } else if (isGenerator(definition)) {
+        [value, seed] = definition.produce(seed);
       } else {
         value = definition;
       }
@@ -67,7 +114,7 @@ class Factory extends AbstractFactory {
 /**
  * This factory generates arrays of things.
  */
-class ArrayFactory extends AbstractFactory {
+class ArrayFactory extends BaseFactory {
   constructor(factory, count = 1) {
     super();
     this.factory = factory;
@@ -96,15 +143,15 @@ exports.factory = (definition) => {
 };
 
 /**
- * Create an array factory
- */
-exports.arrayOf = (factory, n) => {
-  return new ArrayFactory(factory, n);
-};
-
-/**
  * Create a sequence
  */
 exports.sequence = (fn) => {
   return new Sequence(fn);
+};
+
+/**
+ * Create a random value
+ */
+exports.random = (name, ...args) => {
+  return new Random(name, args);
 };
