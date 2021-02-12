@@ -2,8 +2,8 @@
   "name": "@stackup/factory",
   "license": "MIT",
   "version": "0.1.0",
-  "description": "Format URL strings with template parameters",
-  "repository": "rzane/url-fmt",
+  "description": "Define factories to clean up fake data generation in tests",
+  "repository": "rzane/factory",
   "scripts": {
     "test": "jest",
     "test:types": "tsd"
