@@ -172,6 +172,9 @@ exports.sequence = (fn) => {
 /**
  * Create a random value
  */
-exports.random = (name, ...args) => {
-  return new Random(name, args);
-};
+exports.random = new Proxy(
+  {},
+  {
+    get: (_target, name) => (...args) => new Random(name, args),
+  }
+);

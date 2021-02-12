@@ -41,10 +41,12 @@ type Primitive =
  */
 type Value<T> = T extends Primitive ? T : never;
 
-type RandomFunctions = {
-  [K in keyof Chance.Chance]: Chance.Chance[K] extends (...args: any[]) => any
-    ? Chance.Chance[K]
-    : never;
+type RandomFunction<T> = T extends (...args: infer P) => R
+  ? (...args: P) => Generator<R>
+  : never;
+
+export type Random = {
+  [K in keyof Chance.Chance]: RandomFunction<Chance.Chance[K]>;
 };
 
 /**
@@ -83,7 +85,4 @@ export function sequence<T>(fn: (n: number) => T): Generator<T>;
 /**
  * Generates a random value of a specified type.
  */
-export function random<K extends keyof RandomFunctions>(
-  name: K,
-  ...args: Parameters<RandomFunctions[K]>
-): Generator<ReturnType<RandomFunctions[K]>>;
+export const random: Random;

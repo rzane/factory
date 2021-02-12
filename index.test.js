@@ -15,7 +15,7 @@ describe("Sequence", () => {
 });
 
 describe("Random", () => {
-  const age = random("age");
+  const age = random.age();
 
   test("build", () => {
     expect(age.build()).toEqual(expect.any(Number));
@@ -37,7 +37,7 @@ describe("Factory", () => {
   const post = factory({
     id: sequence((id) => id),
     value: sequence((value) => value),
-    message: random("word"),
+    message: random.word(),
   });
 
   const comment = factory({ user, post });
