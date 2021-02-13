@@ -1,7 +1,7 @@
 {
   "name": "@stackup/factory",
   "license": "MIT",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Define factories to clean up fake data generation in tests",
   "repository": "rzane/factory",
   "scripts": {
