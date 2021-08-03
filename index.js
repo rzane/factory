@@ -135,13 +135,18 @@ class ArrayFactory extends BaseFactory {
     this.count = count;
   }
 
-  produce(seed, overrides = []) {
-    if (!Array.isArray(overrides)) {
+  produce(seed, overrides) {
+    if (overrides === undefined) {
+      return this._produce(seed, this.count, []);
+    } else if (Array.isArray(overrides)) {
+      return this._produce(seed, overrides.length, overrides);
+    } else {
       throw new TypeError("Factory overrides must be an array");
     }
+  }
 
+  _produce(seed, count, overrides) {
     const result = [];
-    const count = overrides.length || this.count;
 
     let value;
     for (let i = 0; i < count; i++) {

@@ -98,6 +98,10 @@ describe("ArrayFactory", () => {
     expect(user.array().build([{ id: 6 }])).toEqual([{ id: 6 }]);
   });
 
+  test("build with empty overrides", () => {
+    expect(user.array().build([])).toEqual([]);
+  });
+
   test("deep overrides", () => {
     const comments = comment.array().fixture([{ user: { id: 42 } }]);
 
