@@ -50,6 +50,14 @@ describe("Factory", () => {
     expect(user.build({ id: 2 })).toEqual({ id: 2, name: "Roy" });
   });
 
+  test("build with `undefined` override", () => {
+    expect(user.build({ name: undefined })).toEqual({ id: 1, name: undefined });
+  });
+
+  test("build with `null` override", () => {
+    expect(user.build({ name: null })).toEqual({ id: 1, name: null });
+  });
+
   test("fixture", () => {
     expect(post.fixture()).toEqual({ id: 42, value: 43, message: "datefjo" });
     expect(post.fixture()).toEqual({ id: 42, value: 43, message: "datefjo" });
